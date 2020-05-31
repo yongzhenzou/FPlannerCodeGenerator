@@ -140,7 +140,7 @@ public class GenerateLhCodeAction extends AnAction {
                 }else {
                     activityContent = Utils.readPluginFile(this,"Activity.txt");
                 }
-                writeToFile(dealTempContent(activityContent, fileType),file);
+                writeToFile(dealTempContent(activityContent),file);
                 break;
             case VIEWMODEL:
                 File viewModelFile = new File(modulePath + pageName + "ViewModel.kt");
@@ -148,7 +148,8 @@ public class GenerateLhCodeAction extends AnAction {
                     showMsg(viewModelFile.getName() + "文件已存在");
                     return;
                 }
-                writeToFile(dealTempContent(Utils.readPluginFile(this,"ViewModel.txt"), fileType), viewModelFile);
+                String viewModelContent = Utils.readPluginFile(this, "ViewModel.txt");
+                writeToFile(dealTempContent(viewModelContent), viewModelFile);
                 break;
             case FRAGMENT:
                 File fragmentFile = new File(modulePath + pageName + "Fragment.kt");
@@ -166,7 +167,7 @@ public class GenerateLhCodeAction extends AnAction {
                 }else {
                     fragmentContent = Utils.readPluginFile(this,"Fragment.txt");
                 }
-                writeToFile(dealTempContent(fragmentContent, fileType),fragmentFile);
+                writeToFile(dealTempContent(fragmentContent),fragmentFile);
                 break;
             case LAYOUT:
                 File layoutFile = new File(layoutPath + layoutName + ".xml");
@@ -182,14 +183,14 @@ public class GenerateLhCodeAction extends AnAction {
                 }else {
                     layoutContent = Utils.readPluginFile(this,"Layout.txt");
                 }
-                writeToFile(dealTempContent(layoutContent, fileType), layoutFile);
+                writeToFile(dealTempContent(layoutContent), layoutFile);
                 break;
             case MANIFEST:
                 File manifestFile = new File(manifestPath);
                 if (!manifestFile.exists()) {
                     manifestFile.mkdirs();
                     String manifestString = Utils.readPluginFile(this, "AndroidManifest.xml");
-                    writeToFile(dealTempContent(manifestString, fileType), manifestFile);
+                    writeToFile(dealTempContent(manifestString), manifestFile);
                     return;
                 }
                 try {
@@ -216,7 +217,7 @@ public class GenerateLhCodeAction extends AnAction {
                         e.printStackTrace();
                     }
                     String bindModuleString = Utils.readPluginFile(this, "ActivityBindingModule.txt");
-                    writeToFile(dealTempContent(bindModuleString, fileType),bindModuleFile);
+                    writeToFile(dealTempContent(bindModuleString),bindModuleFile);
                     return;
                 }
                 try {
@@ -244,7 +245,7 @@ public class GenerateLhCodeAction extends AnAction {
                 if (!modelModuleFile.exists()) {
                     modelModuleFile.mkdirs();
                     String string = Utils.readPluginFile(this,"AppViewModelModule.txt");
-                    writeToFile(dealTempContent(string, fileType), modelModuleFile);
+                    writeToFile(dealTempContent(string), modelModuleFile);
                     return;
                 }
                 try {
@@ -271,7 +272,7 @@ public class GenerateLhCodeAction extends AnAction {
                 if (!fragmentBindModuleFile.exists()) {
                     fragmentBindModuleFile.mkdirs();
                     String string = Utils.readPluginFile(this,"FragmentBindingModule.txt");
-                    writeToFile(dealTempContent(string, fileType), fragmentBindModuleFile);
+                    writeToFile(dealTempContent(string), fragmentBindModuleFile);
                     return;
                 }
                 try {
@@ -311,82 +312,7 @@ public class GenerateLhCodeAction extends AnAction {
      *    
      */
 
-    private String dealTempContent(String content, FileType fileType) {
-        switch (fileType) {
-            case ACTIVITY:
-                if (!ifGenerateDataBinding) {
-                    content = content.replace("\n" +
-                            "import androidx.databinding.DataBindingUtil", "");
-                    content = content.replace("\n" +
-                            "import $rootPackageName.databinding.Activity$pageNameBinding", "");
-                    content = content.replace("\n" +
-                            "    private lateinit var binding: Activity$pageNameBinding", "");
-                    content = content.replace("\n" +
-                            "        setupBinding()", "");
-                    content = content.replace("\n" +
-                            "\n" +
-                            "    private fun setupBinding() {\n" +
-                            "        binding = DataBindingUtil.setContentView(this, R.layout.$layoutName)\n" +
-                            "        binding.viewModel = viewModel\n" +
-                            "        binding.lifecycleOwner = this\n" +
-                            "    }", "");
-                }
-                if (!ifGenerateViewModel) {
-                    content = content.replace("\n" +
-                            "    private val viewModel by lazyViewModel<$pageNameViewModel>()", "");
-                    content = content.replace("\n" +
-                            "\n" +
-                            "    private fun setupViewModel() {\n" +
-                            "\n" +
-                            "    }", "");
-                    content = content.replace("\n" +
-                            "\n" +
-                            "    private fun setupViewModel() {\n" +
-                            "\n" +
-                            "    }", "");
-                    if (ifGenerateDataBinding) {
-                        content = content.replace("\n" +
-                                "        binding.viewModel = viewModel", "");
-                    }
-                }
-                break;
-            case FRAGMENT:
-                if (!ifGenerateDataBinding) {
-                    content = content.replace("\n" +
-                            "import androidx.databinding.DataBindingUtil", "");
-                    content = content.replace("\n" +
-                            "import $rootPackageName.databinding.Fragment$pageNameBinding", "");
-                    content = content.replace("\n" +
-                            "    private var binding: Fragment$pageNameBinding? = null", "");
-                    content = content.replace("\n" +
-                            "        setupBinding(view)", "");
-                    content = content.replace("\n" +
-                            "\n" +
-                            "    private fun setupBinding(rootView: View) {\n" +
-                            "        binding = DataBindingUtil.bind(rootView)\n" +
-                            "        binding?.viewModel = viewModel\n" +
-                            "        binding?.lifecycleOwner = this\n" +
-                            "    }", "");
-                }
-                if (!ifGenerateViewModel) {
-                    content = content.replace("\n" +
-                            "    private val viewModel by lazyViewModel<$pageNameViewModel>()", "");
-                    content = content.replace("\n" +
-                            "        setupViewModel()", "");
-                    content = content.replace("\n" +
-                            "\n" +
-                            "    private fun setupViewModel() {\n" +
-                            "\n" +
-                            "    }", "");
-                    if (ifGenerateDataBinding) {
-                        content = content.replace("\n" +
-                                "        binding?.viewModel = viewModel", "");
-                    }
-                }
-                break;
-
-        }
-
+    private String dealTempContent(String content) {
         content = content.replace("$packageName", packageName);
         content = content.replace("$rootPackageName", rootPackageName);
         content = content.replace("$pageName", pageName);
@@ -397,7 +323,7 @@ public class GenerateLhCodeAction extends AnAction {
 
     private String getModulePath() {
         String packagePath = packageName.replace(".", "/");
-        String appPath = project.getBasePath() + "/app/src/main/java/" + packagePath + "/";
+        String appPath = project.getBasePath() + "/app/src/main/java/" + packagePath+"/";
         return appPath;
     }
 
@@ -510,34 +436,25 @@ public class GenerateLhCodeAction extends AnAction {
     private void writeToFile(String content, File file) {
 
         try {
+            File parenFile = file.getParentFile();
+            if (!parenFile.exists()){
+                parenFile.mkdirs();
+            }
             if (!file.exists()) {
                 file.createNewFile();
-
             }
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
-
             BufferedWriter bw = new BufferedWriter(fw);
-
             bw.write(content);
-
             bw.close();
 
         } catch (IOException e) {
-
+            showMsg("err   "+e.toString());
             e.printStackTrace();
 
         }
 
     }
-
-    /**
-     *     * 从AndroidManifest.xml文件中获取当前app的包名
-     * <p>
-     *     * @return
-     * <p>
-     *    
-     */
-
     private String getPackageName() {
 
         String package_name = "";
