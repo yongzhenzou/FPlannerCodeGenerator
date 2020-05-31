@@ -1,0 +1,18 @@
+package $packageName
+
+import android.os.Bundle
+import $rootPackageName.R
+import $rootPackageName.base.BaseActivity
+
+class $pageNameActivity : BaseActivity(R.layout.$layoutName) {
+    private val viewModel by lazyViewModel<$pageNameViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
+
+    }
+}

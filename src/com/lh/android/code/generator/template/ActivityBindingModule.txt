@@ -1,0 +1,11 @@
+package com.lhcredit.planner.dagger
+/**
+ * 新建Activity在此处provide
+ */
+import com.lhcredit.planner.dagger.scope.ActivityScoped
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
+
+@Module
+abstract class ActivityBindingModule {
+}

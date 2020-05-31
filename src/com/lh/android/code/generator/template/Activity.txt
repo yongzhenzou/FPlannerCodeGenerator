@@ -1,0 +1,29 @@
+package $packageName
+
+import android.os.Bundle
+import $rootPackageName.R
+import $rootPackageName.base.BaseActivity
+import androidx.databinding.DataBindingUtil
+import $rootPackageName.databinding.Activity$pageNameBinding
+
+class $pageNameActivity : BaseActivity(R.layout.$layoutName) {
+    private val viewModel by lazyViewModel<$pageNameViewModel>()
+    private lateinit var binding: Activity$pageNameBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupBinding()
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
+
+    }
+
+    private fun setupBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.$layoutName)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+    }
+
+}

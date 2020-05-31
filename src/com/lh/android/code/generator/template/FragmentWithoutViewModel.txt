@@ -1,0 +1,28 @@
+package $packageName
+
+import android.os.Bundle
+import android.view.View
+import $rootPackageName.R
+import $rootPackageName.base.BaseFragment
+import androidx.databinding.DataBindingUtil
+import $rootPackageName.databinding.Fragment$pageNameBinding
+
+class $pageNameFragment : BaseFragment(R.layout.$layoutName) {
+    private var binding: Fragment$pageNameBinding? = null
+
+    companion object {
+        fun newInstance(): $pageNameFragment {
+            return $pageNameFragment()
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupBinding(view)
+    }
+
+    private fun setupBinding(rootView: View) {
+        binding = DataBindingUtil.bind(rootView)
+        binding?.lifecycleOwner = this
+    }
+}

@@ -1,0 +1,19 @@
+package $packageName
+
+import android.os.Bundle
+import android.view.View
+import $rootPackageName.R
+import $rootPackageName.base.BaseFragment
+
+class $pageNameFragment : BaseFragment(R.layout.$layoutName) {
+    companion object {
+        fun newInstance(): $pageNameFragment {
+            return $pageNameFragment()
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+}

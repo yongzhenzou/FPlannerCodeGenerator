@@ -1,0 +1,12 @@
+package $packageName
+
+import android.os.Bundle
+import $rootPackageName.R
+import $rootPackageName.base.BaseActivity
+
+class $pageNameActivity : BaseActivity(R.layout.$layoutName) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+}
