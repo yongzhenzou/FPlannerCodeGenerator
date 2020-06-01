@@ -131,16 +131,16 @@ public class GenerateLhCodeAction extends AnAction {
                     return;
                 }
                 String activityContent = "";
-                if (!ifGenerateViewModel&&!ifGenerateDataBinding){
-                    activityContent = Utils.readPluginFile(this,"ActivityWithoutBindingAndViewModel.txt");
-                }else if (!ifGenerateViewModel){
-                    activityContent = Utils.readPluginFile(this,"ActivityWithoutViewModel.txt");
-                }else if (!ifGenerateDataBinding){
-                    activityContent = Utils.readPluginFile(this,"ActivityWithoutBinding.txt");
-                }else {
-                    activityContent = Utils.readPluginFile(this,"Activity.txt");
+                if (!ifGenerateViewModel && !ifGenerateDataBinding) {
+                    activityContent = Utils.readPluginFile(this, "ActivityWithoutBindingAndViewModel.txt");
+                } else if (!ifGenerateViewModel) {
+                    activityContent = Utils.readPluginFile(this, "ActivityWithoutViewModel.txt");
+                } else if (!ifGenerateDataBinding) {
+                    activityContent = Utils.readPluginFile(this, "ActivityWithoutBinding.txt");
+                } else {
+                    activityContent = Utils.readPluginFile(this, "Activity.txt");
                 }
-                writeToFile(dealTempContent(activityContent),file);
+                writeToFile(dealTempContent(activityContent), file);
                 break;
             case VIEWMODEL:
                 File viewModelFile = new File(modulePath + pageName + "ViewModel.kt");
@@ -158,16 +158,16 @@ public class GenerateLhCodeAction extends AnAction {
                     return;
                 }
                 String fragmentContent = "";
-                if (!ifGenerateViewModel&&!ifGenerateDataBinding){
-                    fragmentContent = Utils.readPluginFile(this,"FragmentWithoutBindingAndViewModel.txt");
-                }else if (!ifGenerateViewModel){
-                    fragmentContent = Utils.readPluginFile(this,"FragmentWithoutViewModel.txt");
-                }else if (!ifGenerateDataBinding){
-                    fragmentContent = Utils.readPluginFile(this,"FragmentWithoutBinding.txt");
-                }else {
-                    fragmentContent = Utils.readPluginFile(this,"Fragment.txt");
+                if (!ifGenerateViewModel && !ifGenerateDataBinding) {
+                    fragmentContent = Utils.readPluginFile(this, "FragmentWithoutBindingAndViewModel.txt");
+                } else if (!ifGenerateViewModel) {
+                    fragmentContent = Utils.readPluginFile(this, "FragmentWithoutViewModel.txt");
+                } else if (!ifGenerateDataBinding) {
+                    fragmentContent = Utils.readPluginFile(this, "FragmentWithoutBinding.txt");
+                } else {
+                    fragmentContent = Utils.readPluginFile(this, "Fragment.txt");
                 }
-                writeToFile(dealTempContent(fragmentContent),fragmentFile);
+                writeToFile(dealTempContent(fragmentContent), fragmentFile);
                 break;
             case LAYOUT:
                 File layoutFile = new File(layoutPath + layoutName + ".xml");
@@ -176,25 +176,23 @@ public class GenerateLhCodeAction extends AnAction {
                     return;
                 }
                 String layoutContent = "";
-                if (!ifGenerateDataBinding){
-                    layoutContent = Utils.readPluginFile(this,"LayoutWithoutBinding.txt");
-                }else if (!ifGenerateViewModel){
-                    layoutContent = Utils.readPluginFile(this,"LayoutWithoutViewModel.txt");
-                }else {
-                    layoutContent = Utils.readPluginFile(this,"Layout.txt");
+                if (!ifGenerateDataBinding) {
+                    layoutContent = Utils.readPluginFile(this, "LayoutWithoutBinding.txt");
+                } else if (!ifGenerateViewModel) {
+                    layoutContent = Utils.readPluginFile(this, "LayoutWithoutViewModel.txt");
+                } else {
+                    layoutContent = Utils.readPluginFile(this, "Layout.txt");
                 }
                 writeToFile(dealTempContent(layoutContent), layoutFile);
                 break;
             case MANIFEST:
-                File manifestFile = new File(manifestPath);
-                if (!manifestFile.exists()) {
-                    manifestFile.mkdirs();
-                    String manifestString = Utils.readPluginFile(this, "AndroidManifest.xml");
-                    writeToFile(dealTempContent(manifestString), manifestFile);
-                    return;
-                }
                 try {
-                    String realManifestContent =Utils.readToString(manifestFile);
+                    File manifestFile = new File(manifestPath);
+                    String manifestString = Utils.readPluginFile(this, "AndroidManifest.txt");
+                    writeToFile(dealTempContent(manifestString), manifestFile);
+                    showMsg(manifestString);
+                    String realManifestContent = Utils.readToString(manifestFile);
+                    showMsg(realManifestContent);
                     realManifestContent = realManifestContent.replace("\n" +
                             "    </application>", "\n" +
                             "        <activity\n" +
@@ -209,18 +207,10 @@ public class GenerateLhCodeAction extends AnAction {
                 }
                 break;
             case ACTIVITY_BINDDING_MODULE:
-                File bindModuleFile = new File(activityBindingModulePath);
-                if (!bindModuleFile.exists()) {
-                    try {
-                        bindModuleFile.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    String bindModuleString = Utils.readPluginFile(this, "ActivityBindingModule.txt");
-                    writeToFile(dealTempContent(bindModuleString),bindModuleFile);
-                    return;
-                }
                 try {
+                    File bindModuleFile = new File(activityBindingModulePath);
+                    String bindModuleString = Utils.readPluginFile(this, "ActivityBindingModule.txt");
+                    writeToFile(dealTempContent(bindModuleString), bindModuleFile);
                     String realBindingModuleContent = Utils.readToString(bindModuleFile);
                     realBindingModuleContent = realBindingModuleContent.replace("@Module", "import " + packageName + "." + pageName + "Activity" +
                             "\n" +
@@ -242,12 +232,8 @@ public class GenerateLhCodeAction extends AnAction {
             case VIEW_MODEL_MODULE:
                 if (!ifGenerateViewModel) return;
                 File modelModuleFile = new File(appViewModulePath);
-                if (!modelModuleFile.exists()) {
-                    modelModuleFile.mkdirs();
-                    String string = Utils.readPluginFile(this,"AppViewModelModule.txt");
-                    writeToFile(dealTempContent(string), modelModuleFile);
-                    return;
-                }
+                String viewModelModuleString = Utils.readPluginFile(this, "AppViewModelModule.txt");
+                writeToFile(dealTempContent(viewModelModuleString), modelModuleFile);
                 try {
                     String realModelModuleContent = Utils.readToString(modelModuleFile);
                     realModelModuleContent = realModelModuleContent.toString().replace("@Module", "import " + packageName + "." + pageName + "ViewModel" +
@@ -269,12 +255,8 @@ public class GenerateLhCodeAction extends AnAction {
                 break;
             case FRAGMENT_BINDING_MODULE:
                 File fragmentBindModuleFile = new File(fragmentBindingModulePath);
-                if (!fragmentBindModuleFile.exists()) {
-                    fragmentBindModuleFile.mkdirs();
-                    String string = Utils.readPluginFile(this,"FragmentBindingModule.txt");
-                    writeToFile(dealTempContent(string), fragmentBindModuleFile);
-                    return;
-                }
+                String fragmentBindingString = Utils.readPluginFile(this, "FragmentBindingModule.txt");
+                writeToFile(dealTempContent(fragmentBindingString), fragmentBindModuleFile);
                 try {
                     String realBindingModuleContent = Utils.readToString(fragmentBindModuleFile);
                     realBindingModuleContent = realBindingModuleContent.toString().replace("@Module", "import " + packageName + "." + pageName + "Fragment" +
@@ -323,7 +305,7 @@ public class GenerateLhCodeAction extends AnAction {
 
     private String getModulePath() {
         String packagePath = packageName.replace(".", "/");
-        String appPath = project.getBasePath() + "/app/src/main/java/" + packagePath+"/";
+        String appPath = project.getBasePath() + "/app/src/main/java/" + packagePath + "/";
         return appPath;
     }
 
@@ -437,7 +419,7 @@ public class GenerateLhCodeAction extends AnAction {
 
         try {
             File parenFile = file.getParentFile();
-            if (!parenFile.exists()){
+            if (!parenFile.exists()) {
                 parenFile.mkdirs();
             }
             if (!file.exists()) {
@@ -449,12 +431,13 @@ public class GenerateLhCodeAction extends AnAction {
             bw.close();
 
         } catch (IOException e) {
-            showMsg("err   "+e.toString());
+            showMsg("err   " + e.toString());
             e.printStackTrace();
 
         }
 
     }
+
     private String getPackageName() {
 
         String package_name = "";
